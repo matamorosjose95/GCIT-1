@@ -273,8 +273,8 @@ def GCIT(x, y, z, statistic = "rdc", lamda = 10, normalize=True, verbose=False, 
             print()
             
         # stop training if discriminator loss is sufficiently low (heuristic)
-        if abs(WD_loss_curr) < 0.1:
-            break
+        #if abs(WD_loss_curr) < 0.1:
+        #    break
             
     if verbose:
         # plot training losses
