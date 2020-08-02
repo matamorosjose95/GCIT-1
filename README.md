@@ -3,9 +3,19 @@
 Esta es una implementación en python del algoritmo de propuesto en el paper paper ["Conditional Independence Testing with Generative Adversarial Networks"](https://arxiv.org/pdf/1907.04068.pdf), al cual se le incluyen ciertas modificaciones detalladas más adelante de manera de complementar el desempeño. El objetivo principal de los autores originales del paper es probar la independencia condicional entre un conjunto de variables X e Y, condicional a Z. Las pruebas serán realizadas sólo en conjuntos sintéticos, los mismos generados por los autores originales.
 
 ## Dependencias
-python 3.7
-pytorch 1.X
+python 3.6.9
+pytorch 1.6.0+cu101
+numpy 1.18.5
+matplotlib 3.2.2
 
 ## Modificaciones al código de los autores originales
-El archivo *GCIT.py* contiene una modificación en la última línea para poder obtener, además el *p-value* del test, las curvas de entrenamiento de las tres redes.
 
+El archivo *GCIT.py* contiene una modificación en la última línea para poder obtener, además el *p-value* del test, las curvas de entrenamiento de las tres redes. También se modifica el mismo archivo para evitar detener el entrenamiento antes de las 1000 iteraciones.
+
+## Implementación en Pytorch
+
+Se usó la implementación en Tensorflow 1.x del archivo *GCIT.py* como base para una implementación en *Pytorch*. Se valida la implementación en la nueva librería comparando las curvas de entrenamiento de las redes para los conjuntos sintéticos Condicionalmente Independientes (CI), Independientes (I), No Independientes (NI).
+
+## Mejoras
+
+Se incorpora la regularización del modelo InfoGAN de este paper ["InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets"](https://arxiv.org/pdf/1606.03657) para preservar la información de la variable condicionante Z en la red generadora de la distribución X|Z.
