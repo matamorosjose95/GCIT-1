@@ -318,4 +318,4 @@ def GCIT(x, y, z, statistic = "rdc", lamda = 10, normalize=True, verbose=False, 
         print('Statistics of generated rho ', stats.describe(rho))
         print('Observed rho',stat(x_test.reshape(len(x_test)), y_test))
 
-    return(p_value)
+    return p_value, np.array(Generator_loss), np.array(WDiscriminator_loss), np.array(Mine_loss)
