@@ -15,8 +15,8 @@ El archivo *GCIT.py* contiene una modificación en la última línea para poder 
 
 ## Implementación en Pytorch
 
-Se usó la implementación en Tensorflow 1.x del archivo *GCIT.py* como base para una implementación en *Pytorch*. Se valida la implementación en la nueva librería comparando las curvas de entrenamiento de las redes para los conjuntos sintéticos Condicionalmente Independientes (CI), Independientes (I), No Independientes (NI).
+La implementación en *Pytorch* se realizó acorde al algoritmo descrito en el material suplementario del paper. Se valida la implementación en la nueva librería comparando las curvas de entrenamiento de las redes para los conjuntos sintéticos Condicionalmente Independientes (CI), Independientes (I), No Independientes (NI).
 
 ## Mejoras
 
-Se incorpora la regularización del modelo InfoGAN de este paper ["InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets"](https://arxiv.org/pdf/1606.03657) para preservar la información de la variable condicionante Z en la red generadora de la distribución X|Z.
+Se incorpora la regularización del modelo InfoGAN de este paper ["InfoGAN: Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets"](https://arxiv.org/pdf/1606.03657) para preservar la información de la variable condicionante Z en la red generadora de la distribución X|Z. Esto finalmente corresponde a entrenar un estimador de información mutua entre las muestras generadas y la variable condicionante Z, para luego agregar un término extra en la función de costos de la red generadora de tal forma que se maximice este término.
