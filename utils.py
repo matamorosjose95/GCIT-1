@@ -319,3 +319,18 @@ def rdc(x, y, f=np.sin, k=20, s=1/6., n=1):
             k = (ub + lb) // 2
 
     return np.sqrt(np.max(eigs))
+
+class CIT_dataset(Dataset):
+  def __init__(self,X,Y,Z):
+    self.X = X
+    self.Y = Y
+    self.Z = Z
+
+  def __len__(self):
+    return self.X.shape[0]
+
+  def __getitem__(self, idx):
+    Xi = self.X[idx]
+    Yi = self.Y[idx]
+    Zi = self.Z[idx]
+    return Xi, Yi, Zi    
