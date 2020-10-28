@@ -43,10 +43,10 @@ def data_perm(x,z,batch_size):
 
 def training(x_train, y_train, z_train, training_rule, l_r= 1e-4,Iterations = 1000, batch_size = 64, lambda_x = 10,lambda_z = 10, gamma = 0.8, n_z = 62):
   # Models
-  G_net   = Generator(50,1,n_z).cuda() # z_shape, x_shape, v_shape.
-  D_net   = Discriminator(1,50).cuda() # x_shape, z_shape
-  xMI_net = MINE(1).cuda()             # x_shape
-  zMI_net = zMINE(1,50).cuda()         # x_shape, Z_shape
+  G_net   = Generator(50,1,n_z)#.cuda() # z_shape, x_shape, v_shape.
+  D_net   = Discriminator(1,50)#.cuda() # x_shape, z_shape
+  xMI_net = MINE(1)#.cuda()             # x_shape
+  zMI_net = zMINE(1,50)#.cuda()         # x_shape, Z_shape
 
   # Optimizers
   D_optimizer   = optim.Adam(D_net.parameters(), lr=l_r, betas=(0.5, 0.99))
@@ -59,14 +59,14 @@ def training(x_train, y_train, z_train, training_rule, l_r= 1e-4,Iterations = 10
   zMI_loss  = []
   xMI_loss  = []
   # Noise
-  v_mb = torch.FloatTensor(batch_size, n_z).cuda()
+  v_mb = torch.FloatTensor(batch_size, n_z)#.cuda()
   # data evolution
   fine_tunning = 5
   pbar = tqdm(total=Iterations)
   for i in range(Iterations):
     for k in range(fine_tunning):
       # ruido 
-      v_mb.uniform_(0,1).cuda()
+      v_mb.uniform_(0,1)#.cuda()
       # minibatch de datos permutados
       z_hat_mb, x_hat_mb, z_mb, x_mb = data_perm(x_train, z_train, batch_size)
       # muestra falsa generada
@@ -92,7 +92,7 @@ def training(x_train, y_train, z_train, training_rule, l_r= 1e-4,Iterations = 10
     zMI_loss.append(-1*MINE_z_loss.detach().cpu().numpy().item())
     # Entrenar RED GENERADORA
     idx = np.random.permutation(len(x_train))
-    v_mb.uniform_(0,1).cuda()
+    v_mb.uniform_(0,1)#.cuda()
     z_hat_mb, x_hat_mb, z_mb, x_mb = data_perm(x_train, z_train, batch_size)
     x_fk = G_net.forward(z_mb, v_mb)
     G_optimizer.zero_grad()
