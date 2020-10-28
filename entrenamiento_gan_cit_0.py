@@ -24,7 +24,7 @@ from matplotlib import cm
 
 from sklearn.preprocessing import StandardScaler
 
-from skimage import io
+#from skimage import io
 
 import numpy as np 
 import sys
@@ -33,8 +33,8 @@ def data_perm(x,z,batch_size):
   idx = np.random.permutation(len(x))
   z_mb = z[idx][:batch_size]
   x_mb = x[idx][:batch_size]
-  x_mb = torch.Tensor(x_mb).float().cuda()
-  z_mb = torch.Tensor(z_mb).float().cuda()
+  x_mb = torch.Tensor(x_mb).float()
+  z_mb = torch.Tensor(z_mb).float()
   idxhat = np.random.permutation(len(x_mb))
   idzhat = np.random.permutation(len(z_mb))
   x_hat_mb = x_mb[idxhat]
@@ -42,11 +42,13 @@ def data_perm(x,z,batch_size):
   return z_hat_mb, x_hat_mb, z_mb, x_mb
 
 def training(x_train, y_train, z_train, training_rule, l_r= 1e-4,Iterations = 1000, batch_size = 64, lambda_x = 10,lambda_z = 10, gamma = 0.8, n_z = 62):
+  dimX = x_train.shape[1]
+  dimZ = z_train.shape[1]
   # Models
-  G_net   = Generator(50,1,n_z)#.cuda() # z_shape, x_shape, v_shape.
-  D_net   = Discriminator(1,50)#.cuda() # x_shape, z_shape
-  xMI_net = MINE(1)#.cuda()             # x_shape
-  zMI_net = zMINE(1,50)#.cuda()         # x_shape, Z_shape
+  G_net   = Generator(dimZ, dimX, n_z)#.cuda() # z_shape, x_shape, v_shape.
+  D_net   = Discriminator(dimX ,dimZ)#.cuda() # x_shape, z_shape
+  xMI_net = MINE(dimX)#.cuda()             # x_shape
+  zMI_net = zMINE(dimX,dimZ)#.cuda()         # x_shape, Z_shape
 
   # Optimizers
   D_optimizer   = optim.Adam(D_net.parameters(), lr=l_r, betas=(0.5, 0.99))
@@ -62,7 +64,7 @@ def training(x_train, y_train, z_train, training_rule, l_r= 1e-4,Iterations = 10
   v_mb = torch.FloatTensor(batch_size, n_z)#.cuda()
   # data evolution
   fine_tunning = 5
-  pbar = tqdm(total=Iterations)
+  #pbar = tqdm(total=Iterations)
   for i in range(Iterations):
     for k in range(fine_tunning):
       # ruido 
@@ -103,22 +105,22 @@ def training(x_train, y_train, z_train, training_rule, l_r= 1e-4,Iterations = 10
       Generator_loss.backward()
       G_optimizer.step()
       G_loss.append(-1*Generator_loss.detach().cpu().numpy().item())
-      pbar.update(1)
+      #pbar.update(1)
     if training_rule == 'InfoGAN':
       Generator_loss = -1*(torch.mean(D_net.forward(x_fk.detach(),z_mb) - D_net.forward(x_mb, z_mb)) - lambda_z*mine_z_loss)
       Generator_loss.backward()
       G_optimizer.step()
       G_loss.append(-1*Generator_loss.detach().cpu().numpy().item())
-      pbar.update(1)
+      #pbar.update(1)
     if training_rule == 'GCIT':
       Generator_loss = -1*(torch.mean(D_net.forward(x_fk.detach(),z_mb) - D_net.forward(x_mb, z_mb)) - lambda_x*mine_x_loss)
       Generator_loss.backward()
       G_optimizer.step()
       G_loss.append(-1*Generator_loss.detach().cpu().numpy().item())
-      pbar.update(1)
+      #pbar.update(1)
   D_loss = np.array(D_loss)
   zMI_loss = np.array(zMI_loss)
   xMI_loss = np.array(xMI_loss)
   G_loss = np.array(G_loss)
-  pbar.close()
+  #pbar.close()
   return zMI_loss,xMI_loss, G_loss, D_loss, G_net
