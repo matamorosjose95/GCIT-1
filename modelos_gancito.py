@@ -60,7 +60,7 @@ class MINE(nn.Module):
     if dim_x <= 20:
         dim_h = int(3)
     else:
-        dim_h = int(x_dim / 10)
+        dim_h = int(dim_x / 10)
 
     self.fc1 = nn.Sequential(nn.Linear(dim_x + dim_x, dim_h), nn.Tanh())
     self.fc2 = nn.Sequential(nn.Linear(dim_x + dim_x, dim_h), nn.Tanh())
