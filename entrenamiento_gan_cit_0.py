@@ -121,4 +121,4 @@ def training(x_train, y_train, z_train, training_rule, l_r= 1e-4,Iterations = 10
   xMI_loss = np.array(xMI_loss)
   G_loss = np.array(G_loss)
   pbar.close()
-  return zMI_loss,xMI_loss, G_loss, D_loss
+  return zMI_loss,xMI_loss, G_loss, D_loss, G_net
